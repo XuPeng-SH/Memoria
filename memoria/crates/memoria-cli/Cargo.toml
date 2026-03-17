@@ -18,6 +18,7 @@ memoria-embedding = { workspace = true }
 memoria-service = { workspace = true }
 memoria-git = { workspace = true }
 memoria-mcp = { workspace = true }
+openssl = { workspace = true }
 memoria-api = { workspace = true }
 axum = { workspace = true }
 tokio = { workspace = true }

@@ -1,6 +1,6 @@
 .PHONY: help check-env up down status logs logs-db \
         up-db down-db up-api down-api rebuild-api health \
-        dev build build-local check \
+        dev build build-local build-cross check \
         test test-unit test-integration test-e2e bench \
         new-key list-keys revoke-keys \
         clean reset
@@ -41,6 +41,7 @@ help:
 	@echo "  make dev                Run API locally (RUST_LOG=debug make dev)"
 	@echo "  make build              Build release binary"
 	@echo "  make build-local        Build with local embedding support"
+	@echo "  make build-cross        Cross-build aarch64 (test CI cross-compilation)"
 	@echo "  make check              cargo check + clippy"
 	@echo ""
 	@echo "Tests:"
@@ -125,6 +126,17 @@ build-local:
 	@echo "Building release binary with local embedding..."
 	@cd memoria && SQLX_OFFLINE=true cargo build --release -p memoria-cli --features local-embedding
 	@echo "Binary: memoria/target/release/memoria (with local embedding)"
+
+build-cross:
+	@echo "Cross-building for aarch64-unknown-linux-gnu..."
+	@cd memoria && SQLX_OFFLINE=true \
+		PKG_CONFIG_ALLOW_CROSS=1 \
+		X86_64_UNKNOWN_LINUX_GNU_OPENSSL_DIR=/usr \
+		X86_64_UNKNOWN_LINUX_GNU_OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu \
+		X86_64_UNKNOWN_LINUX_GNU_OPENSSL_INCLUDE_DIR=/usr/include \
+		AARCH64_UNKNOWN_LINUX_GNU_OPENSSL_DIR=/usr/lib/aarch64-linux-gnu \
+		cross build --release -p memoria-cli --target aarch64-unknown-linux-gnu
+	@echo "Binary: memoria/target/aarch64-unknown-linux-gnu/release/memoria"
 
 # ── Release ─────────────────────────────────────────────────────────
 
