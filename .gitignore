@@ -24,14 +24,5 @@ CLAUDE.md
 memoria/target/
 memoria/.env
 
-# Python (legacy)
-__pycache__/
-*.pyc
-*.egg-info/
-dist/
-build/
-.pytest_cache/
-.coverage
-.mypy_cache/
-.ruff_cache/
-htmlcov/
+# Plugin dev keys
+dev-signing-key.b64
